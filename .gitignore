@@ -16,6 +16,9 @@ data_*/
 mono_crash.*.json
 
 # Project files
-src\configs\db
-src\refs
-addons
+# addons\ridiculous_coding
+
+# Executables
+AppRunner.console.exe
+AppRunner.exe
+AppRunner.pck

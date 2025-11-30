@@ -14,6 +14,7 @@ var userIp: String
 @export var fullAppList: Array
 
 func OnReadySetup() -> Array[Entities.App]:
+	FileManager.CreateMainFolders()
 	DbController.SetupDatabase()
 	SetupUserData()
 	return LoadAppsData()

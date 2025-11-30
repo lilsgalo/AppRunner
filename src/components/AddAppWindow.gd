@@ -31,8 +31,8 @@ func UpdateValidState(value: bool, back: bool = false) -> void:
 	else:
 		frontValid = value
 
-func FormatInputForCreate(secretsId: String, refFolder: String) -> DbController.CreateInput:
-	var input = DbController.CreateInput.new()
+func FormatInputForCreate(secretsId: String, refFolder: String) -> Entities.App.CreateInput:
+	var input = Entities.App.CreateInput.new()
 	input.name = appName.to_lower()
 	input.backend_path = backPath
 	input.frontend_path = frontPath

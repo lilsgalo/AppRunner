@@ -22,6 +22,20 @@ class App:
 	var canRunHomolog: bool
 	var canRunProd: bool
 	
+	class CreateInput:
+		var name: String
+		var backend_path: String
+		var frontend_path: String
+		var secrets_id: String
+		var ref_folder: String
+
+	class UpdateInput:
+		var rowid: int
+		var name: String
+		var backend_path: String
+		var frontend_path: String
+		var secrets_id: String
+	
 	static func Create(p_rowid: int, p_name: String, p_backendPath: String, p_frontendPath: String, p_secretsId: String, p_refFolder: String) -> App:
 		var app = App.new()
 		app.rowid = p_rowid

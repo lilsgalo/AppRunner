@@ -1,36 +1,28 @@
 extends Node
 
+var userPath: String
+
 var db: SQLite
 var appsTable: String = "apps"
 var userTable: String = "user"
-var dbPath: String = "res://src/configs/db/data.db"
+var dbPath: String = "/db/data.db"
 
 # Referências
-var dbRefPath: String = "res://src/configs/db"
+var dbRefPath: String = "/db"
 var dbFileName: String = "data.db"
 
-class CreateInput:
-	var name: String
-	var backend_path: String
-	var frontend_path: String
-	var secrets_id: String
-	var ref_folder: String
-
-class UpdateInput:
-	var rowid: int
-	var name: String
-	var backend_path: String
-	var frontend_path: String
-	var secrets_id: String
+func _ready() -> void:
+	userPath = OS.get_user_data_dir() + "/user_config/"
 
 func SetupDatabase() -> void:
 	db = SQLite.new()
-	db.path = dbPath
-	
-	var hasfile = DirAccess.get_files_at(dbRefPath).has(dbFileName)
-	if !hasfile:
-		CreateAppsTable()
+	db.path = userPath + dbPath
 	db.open_db()
+	
+	var hasfile = DirAccess.get_files_at(userPath + dbRefPath).has(dbFileName)
+	if hasfile:
+		CreateAppsTable()
+		CreateUserTable()
 
 
 func CreateAppsTable() -> void:
@@ -47,7 +39,17 @@ func CreateAppsTable() -> void:
 	if !result:
 		Utils.Log("Não foi possível criar tabela de aplicações", Utils.Type.Error)
 
-func Create(input: CreateInput) -> int:
+func CreateUserTable() -> void:
+	var table = {
+		"email": {"data_type": "text"},
+		"ip": {"data_type": "text"}
+	}
+	
+	var result = db.create_table("user", table)
+	if !result:
+		Utils.Log("Não foi possível criar tabela de usuário", Utils.Type.Error)
+
+func Create(input: Entities.App.CreateInput) -> int:
 	var data = {
 		"name" = input.name,
 		"backend_path" = input.backend_path,
@@ -62,7 +64,7 @@ func Create(input: CreateInput) -> int:
 	Utils.Log("Ops! Aconteceu algo errado.", Utils.Type.Error)
 	return -1
 
-func UpdateApp(input: UpdateInput) -> void:
+func UpdateApp(input: Entities.App.UpdateInput) -> void:
 	var data = {
 		"rowid" = input.rowid,
 		"name" = input.name,

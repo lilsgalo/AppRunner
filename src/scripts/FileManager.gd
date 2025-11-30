@@ -1,7 +1,9 @@
 extends Node
 
+var appRunner: String = "AppRunner"
+var userPath: String
 var vsUserSecretsPath: String = "/Microsoft/UserSecrets/%s/secrets.json"
-var refsPath: String = "res://src/refs/"
+var refsPath: String = "/refs"
 
 # Referências para arquivos de secrets
 var assemblyPath: String = "/Properties/AssemblyInfo.cs"
@@ -21,22 +23,32 @@ var userSecretsRegex: String = '(?<=UserSecretsId\\(")[0-9a-fA-F-]{36}(?="\\))'
 
 var runningProcesses: Array[int]
 
+func _ready() -> void:
+	userPath = OS.get_user_data_dir() + "/user_config/"
+
+func CreateMainFolders() -> void:
+	var dir = DirAccess.open(OS.get_user_data_dir())
+	if !dir.get_directories().has("user_config"):
+		dir.make_dir("user_config")
+	CreateFolder("refs")
+	CreateFolder("db")
+
 func CreateRefFolder(appName: String) -> String:
 	appName = appName.to_lower()
-	var ref = refsPath + appName
-	
-	var dir = DirAccess.open(refsPath)
-	if !dir.get_directories().has(appName):
-		dir.make_dir(appName)
-	return ref
+	var path = CreateFolder(appName, refsPath)
+	return path
 
-func CopySecretsFile(id: String, appName: String) -> void:
-	appName = appName.to_lower()
-	var ref = refsPath + appName
-	var file = GetSecretsFile(id)
+func CreateFolder(fileName: String, complementaryPath: String = "") -> String:
+	var dir = DirAccess.open(userPath + complementaryPath)
+	if !dir.get_directories().has(fileName):
+		dir.make_dir(fileName)
+	var path = userPath + complementaryPath + "/" + fileName
+	return path
 
-	var secrets = FileAccess.open("%s/%s" % [ref, secretsRefPath], FileAccess.WRITE)
-	secrets.store_string(file.get_as_text())
+func CopySecretsFile(secretsId: String, refFolder: String) -> void:
+	var vsFile = GetSecretsFile(secretsId)
+	var secrets = FileAccess.open("%s/%s/%s/%s" % [userPath, refsPath, refFolder, secretsRefPath], FileAccess.WRITE)
+	secrets.store_string(vsFile.get_as_text())
 
 func ValidateBackendPath(path: String) -> bool:
 	var apiName = GetApiNameFromPath(path)
@@ -55,14 +67,22 @@ func GetApiNameFromPath(path: String) -> String:
 func GetSecretsId(path: String) -> String:
 	var regex = CompileRegex(userSecretsRegex)
 	var file = FileAccess.get_file_as_string(path + assemblyPath)
+	if !file:
+		Utils.Log("Failed to get AssemblyInfo.cs", Utils.Type.Error)
+		return ""
+	
 	var result = regex.search(file).get_string()
-	return result
+	if result:
+		return result
+	return ""
 
 func GetSecretsFile(id: String) -> FileAccess:
 	var appData = OS.get_environment("APPDATA")
 	var path = vsUserSecretsPath % id
 	var file = FileAccess.open(appData + path, FileAccess.READ)
-	return file
+	if file:
+		return file
+	return null
 
 func CompileRegex(expression: String) -> RegEx:
 	var regex = RegEx.new()

@@ -5,6 +5,7 @@ var tableItemList: Array
 var runningPids: Array[Dictionary]
 
 func _ready() -> void:
+	#%TimerLabel.text = OS.get_user_data_dir() + "/user_config/" #TEST usado para debug
 	%TimerLabel.text = "Nenhuma aplicação rodando no momento"
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	var content = Global.OnReadySetup()

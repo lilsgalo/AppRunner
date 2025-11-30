@@ -10,9 +10,10 @@ config_version=5
 
 [application]
 
-config/name="Launchpad"
+config/name="AppRunner"
 config/version="0.1"
 run/main_scene="uid://exbisxbyx6xe"
+config/custom_user_dir_name="AppRunner"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
