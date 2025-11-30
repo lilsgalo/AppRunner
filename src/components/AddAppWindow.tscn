@@ -1,0 +1,155 @@
+[gd_scene load_steps=8 format=3 uid="uid://bhpbe080wk0y7"]
+
+[ext_resource type="Script" uid="uid://df1106ejw4ng3" path="res://src/components/AddAppWindow.gd" id="1_q8krt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q8krt"]
+content_margin_left = 5.0
+draw_center = false
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rqbeq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x2grt"]
+bg_color = Color(0.1764706, 0.1764706, 0.1764706, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i8tn6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x2grt"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q8krt"]
+
+[node name="AddAppModal" type="Window"]
+oversampling_override = 1.0
+title = "Nova Aplicação"
+initial_position = 2
+size = Vector2i(450, 250)
+script = ExtResource("1_q8krt")
+metadata/_edit_use_anchors_ = true
+
+[node name="FileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+oversampling_override = 1.0
+title = "Open a Directory"
+dialog_hide_on_ok = true
+file_mode = 2
+display_mode = 1
+access = 2
+use_native_dialog = true
+
+[node name="Container" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="MenuBar" type="HBoxContainer" parent="Container"]
+visible = false
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Container/MenuBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_styles/normal = SubResource("StyleBoxFlat_q8krt")
+text = "Nova aplicação"
+vertical_alignment = 1
+
+[node name="CloseBtn" type="Button" parent="Container/MenuBar"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_rqbeq")
+text = "Close"
+
+[node name="Body" type="Panel" parent="Container"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_x2grt")
+
+[node name="BodyMargins" type="MarginContainer" parent="Container/Body"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+metadata/_edit_use_anchors_ = true
+
+[node name="Content" type="VBoxContainer" parent="Container/Body/BodyMargins"]
+layout_mode = 2
+
+[node name="NameField" type="HBoxContainer" parent="Container/Body/BodyMargins/Content"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Container/Body/BodyMargins/Content/NameField"]
+layout_mode = 2
+text = "Nome:"
+
+[node name="NameInput" type="LineEdit" parent="Container/Body/BodyMargins/Content/NameField"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i8tn6")
+
+[node name="BackPathField" type="HBoxContainer" parent="Container/Body/BodyMargins/Content"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Container/Body/BodyMargins/Content/BackPathField"]
+layout_mode = 2
+text = "Backend:"
+
+[node name="BackPathInput" type="LineEdit" parent="Container/Body/BodyMargins/Content/BackPathField"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/focus = SubResource("StyleBoxEmpty_x2grt")
+placeholder_text = "Selecione uma pasta..."
+editable = false
+flat = true
+
+[node name="BackFileBtn" type="Button" parent="Container/Body/BodyMargins/Content/BackPathField"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_q8krt")
+text = ". . ."
+
+[node name="FrontPathField" type="HBoxContainer" parent="Container/Body/BodyMargins/Content"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Container/Body/BodyMargins/Content/FrontPathField"]
+layout_mode = 2
+text = "Frontend:"
+
+[node name="FrontPathInput" type="LineEdit" parent="Container/Body/BodyMargins/Content/FrontPathField"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/focus = SubResource("StyleBoxEmpty_x2grt")
+placeholder_text = "Selecione uma pasta..."
+editable = false
+flat = true
+
+[node name="FrontFileBtn" type="Button" parent="Container/Body/BodyMargins/Content/FrontPathField"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_q8krt")
+text = ". . ."
+
+[node name="SaveBtn" type="Button" parent="Container/Body/BodyMargins/Content"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 10
+text = "Salvar"
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="dir_selected" from="FileDialog" to="." method="_on_file_dialog_dir_selected"]
+[connection signal="text_changed" from="Container/Body/BodyMargins/Content/NameField/NameInput" to="." method="_on_name_input_text_changed"]
+[connection signal="pressed" from="Container/Body/BodyMargins/Content/BackPathField/BackFileBtn" to="." method="_on_back_file_btn_pressed"]
+[connection signal="pressed" from="Container/Body/BodyMargins/Content/FrontPathField/FrontFileBtn" to="." method="_on_front_file_btn_pressed"]
+[connection signal="pressed" from="Container/Body/BodyMargins/Content/SaveBtn" to="." method="_on_save_btn_pressed"]

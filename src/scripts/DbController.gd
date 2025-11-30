@@ -1,0 +1,115 @@
+extends Node
+
+var db: SQLite
+var appsTable: String = "apps"
+var userTable: String = "user"
+var dbPath: String = "res://src/configs/db/data.db"
+
+# Referências
+var dbRefPath: String = "res://src/configs/db"
+var dbFileName: String = "data.db"
+
+class CreateInput:
+	var name: String
+	var backend_path: String
+	var frontend_path: String
+	var secrets_id: String
+	var ref_folder: String
+
+class UpdateInput:
+	var rowid: int
+	var name: String
+	var backend_path: String
+	var frontend_path: String
+	var secrets_id: String
+
+func SetupDatabase() -> void:
+	db = SQLite.new()
+	db.path = dbPath
+	
+	var hasfile = DirAccess.get_files_at(dbRefPath).has(dbFileName)
+	if !hasfile:
+		CreateAppsTable()
+	db.open_db()
+
+
+func CreateAppsTable() -> void:
+	var table = {
+		"rowid": {"data_type": "int", "primary_key": true},
+		"name": {"data_type": "text"},
+		"backend_path": {"data_type": "text"},
+		"frontend_path": {"data_type": "text"},
+		"secrets_id": {"data_type": "text"},
+		"ref_folder": {"data_type": "text"}
+	}
+	
+	var result = db.create_table("apps", table)
+	if !result:
+		Utils.Log("Não foi possível criar tabela de aplicações", Utils.Type.Error)
+
+func Create(input: CreateInput) -> int:
+	var data = {
+		"name" = input.name,
+		"backend_path" = input.backend_path,
+		"frontend_path" = input.frontend_path,
+		"secrets_id" = input.secrets_id,
+		"ref_folder" = input.ref_folder
+	}
+	
+	var result = db.insert_row(appsTable, data)
+	if result:
+		return db.last_insert_rowid
+	Utils.Log("Ops! Aconteceu algo errado.", Utils.Type.Error)
+	return -1
+
+func UpdateApp(input: UpdateInput) -> void:
+	var data = {
+		"rowid" = input.rowid,
+		"name" = input.name,
+		"backend_path" = input.backend_path,
+		"frontend_path" = input.frontend_path,
+		"secrets_id" = input.secrets_id
+	}
+	
+	var result = db.update_rows(appsTable, "rowid = %s" % input.rowid, data)
+	if !result:
+		Utils.Log("Ops! Aconteceu algo errado", Utils.Type.Error)
+
+func DeleteApp(id: int) -> void:
+	var result = db.delete_rows(appsTable, "rowid = %s" % id)
+	if !result:
+		Utils.Log("Ops! Aconteceu algo errado", Utils.Type.Error)
+
+func GetById(id: int) -> Entities.App:
+	var data = _GetById(appsTable, str(id), ["rowid, *"])
+	if data:
+		return FormatAppData(data.front())
+	else:
+		Utils.Log("GetById não retornou resultados", Utils.Type.Error)
+		return null
+
+func GetAll() -> Array:
+	var data = db.select_rows(appsTable, "", ["*"])
+	return data
+
+func GetUser(id: int = 1) -> Dictionary:
+	var data = _GetById(userTable, str(id), ["*"])
+	if data:
+		return data.front()
+	Utils.Log("GetUser não retornou resultados", Utils.Type.Error)
+	return {}
+
+func FormatAppData(data: Dictionary) -> Entities.App:
+	var app = Entities.App.Create(
+		data.get("rowid"),
+		data.get("name"),
+		data.get("backend_path"),
+		data.get("frontend_path"),
+		data.get("secrets_id"),
+		data.get("ref_folder")
+	)
+	
+	return app
+
+func _GetById(table: String, id: String, select: Array[String]) -> Array:
+	return db.select_rows(table, "rowid = %s" % id, select)
