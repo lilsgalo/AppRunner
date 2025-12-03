@@ -1,31 +1,29 @@
 [gd_scene load_steps=15 format=3 uid="uid://0wgtaxeptis8"]
 
 [ext_resource type="Script" uid="uid://b5524tcca5754" path="res://src/components/TableItem.gd" id="1_433wv"]
+[ext_resource type="Texture2D" uid="uid://u3fwlj6k4ho0" path="res://src/assets/play-white.svg" id="2_pvm18"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hk4rc"]
 content_margin_left = 30.0
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_insap"]
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bkxs0"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bhyes"]
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hn40c"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pvm18"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_14o4w"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yoide"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hk4rc"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_w32tk"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_433wv"]
-bg_color = Color(0.58219975, 0.053989336, 0.031423606, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_chrbn"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_pvm18"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5qjmp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_chrbn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vjwby"]
 
@@ -40,78 +38,81 @@ offset_bottom = -31.0
 script = ExtResource("1_433wv")
 metadata/_edit_use_anchors_ = true
 
-[node name="NameLabel" type="Label" parent="."]
+[node name="NameContainer" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="NameContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(660, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_hk4rc")
 text = "NOME"
 vertical_alignment = 1
 
-[node name="VSeparator" type="VSeparator" parent="."]
+[node name="Buttons" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(330, 0)
 layout_mode = 2
-theme_override_styles/separator = SubResource("StyleBoxEmpty_insap")
+theme_override_constants/separation = 15
+alignment = 1
 
-[node name="RunDevBtn" type="Button" parent="."]
+[node name="RunDevBtn" type="Button" parent="Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_bkxs0")
-text = "dev"
+icon = ExtResource("2_pvm18")
 
-[node name="RunStageBtn" type="Button" parent="."]
+[node name="VSeparator2" type="VSeparator" parent="Buttons"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_bhyes")
+
+[node name="RunStageBtn" type="Button" parent="Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_hn40c")
-text = "stage"
+icon = ExtResource("2_pvm18")
 
-[node name="RunHomologBtn" type="Button" parent="."]
+[node name="VSeparator3" type="VSeparator" parent="Buttons"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_pvm18")
+
+[node name="RunHomologBtn" type="Button" parent="Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_14o4w")
-text = "homolog"
+icon = ExtResource("2_pvm18")
 
-[node name="RunProdBtn" type="Button" parent="."]
+[node name="VSeparator4" type="VSeparator" parent="Buttons"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_pvm18")
+
+[node name="RunProdBtn" type="Button" parent="Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_yoide")
-text = "prod"
-
-[node name="RunOptionButton" type="OptionButton" parent="."]
-visible = false
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/focus = SubResource("StyleBoxEmpty_hk4rc")
-selected = 0
-item_count = 3
-popup/item_0/text = "Dev"
-popup/item_0/id = 0
-popup/item_1/text = "Stage"
-popup/item_1/id = 1
-popup/item_2/text = "Homolog"
-popup/item_2/id = 2
-
-[node name="VSeparator2" type="VSeparator" parent="."]
-layout_mode = 2
-theme_override_styles/separator = SubResource("StyleBoxEmpty_w32tk")
+icon = ExtResource("2_pvm18")
 
 [node name="Actions" type="HBoxContainer" parent="."]
-custom_minimum_size = Vector2(400, 0)
+custom_minimum_size = Vector2(330, 0)
 layout_mode = 2
 alignment = 1
-
-[node name="RunBackBtn" type="Button" parent="Actions"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_433wv")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_chrbn")
-text = "Backend"
 
 [node name="RunFrontBtn" type="Button" parent="Actions"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_icons/icon = SubResource("CompressedTexture2D_pvm18")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_5qjmp")
-text = "Frontend"
+text = "front"
+icon = ExtResource("2_pvm18")
+
+[node name="RunBackBtn" type="Button" parent="Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_chrbn")
+text = "back"
+icon = ExtResource("2_pvm18")
 
 [node name="EditBtn" type="Button" parent="Actions"]
 unique_name_in_owner = true
@@ -125,8 +126,7 @@ layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_433wv")
 text = "Delete"
 
-[connection signal="item_selected" from="RunOptionButton" to="." method="_on_run_option_button_item_selected"]
-[connection signal="pressed" from="Actions/RunBackBtn" to="." method="_on_run_back_btn_pressed"]
 [connection signal="pressed" from="Actions/RunFrontBtn" to="." method="_on_run_front_btn_pressed"]
+[connection signal="pressed" from="Actions/RunBackBtn" to="." method="_on_run_back_btn_pressed"]
 [connection signal="pressed" from="Actions/EditBtn" to="." method="_on_edit_btn_pressed"]
 [connection signal="pressed" from="Actions/DeleteBtn" to="." method="_on_delete_btn_pressed"]

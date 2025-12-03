@@ -2,13 +2,6 @@ extends Node
 
 signal reloadList
 
-var builds = {
-	0:"dev",
-	1:"stage",
-	2:"homolog",
-	3:"prod"
-}
-
 var userEmail: String
 var userIp: String
 @export var fullAppList: Array
@@ -39,7 +32,7 @@ func SetupAppsData(data: Array) -> Array[Entities.App]:
 		var app = DbController.FormatAppData(item)
 		app.frontIsRunning = false
 		app.backIsRunning = false
-		app.build = 1
+		app.env = 1
 		if app.backendPath or app.frontendPath: ## TODO: gambiarra, arrumar depois quando implementar o uso dos secrets
 			app.canRunDev = true
 			app.canRunStage = true

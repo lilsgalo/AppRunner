@@ -14,7 +14,7 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("esc"):
-		%CloseBtn.pressed.emit()
+		get_tree().quit()
 
 func _process(_delta: float) -> void:
 	if !%Timer.is_stopped():
@@ -98,7 +98,7 @@ func _on_timer_timeout() -> void:
 	CheckRunningProcesses()
 
 #region table item btns
-func _on_run_back_btn_pressed(id: int, _build: int) -> void:
+func _on_run_back_btn_pressed(id: int, _env: int) -> void:
 	var app = Global.GetApp(id)
 	var nodeRef = GetAppNodeRef(app.rowid)
 	if app.backIsRunning:
@@ -115,7 +115,7 @@ func _on_run_back_btn_pressed(id: int, _build: int) -> void:
 	nodeRef.SetBackState(app.backIsRunning)
 	Global.UpdateAppControls(app)
 
-func _on_run_front_btn_pressed(id: int, _build: int) -> void:
+func _on_run_front_btn_pressed(id: int, _env: int) -> void:
 	var app = Global.GetApp(id)
 	var nodeRef = GetAppNodeRef(app.rowid)
 	if app.frontIsRunning:
@@ -132,11 +132,13 @@ func _on_run_front_btn_pressed(id: int, _build: int) -> void:
 	nodeRef.SetFrontState(app.frontIsRunning)
 	Global.UpdateAppControls(app)
 
-func _on_edit_btn_pressed(id: int, build: int) -> void:
-	print('edit => id: %s, build: %s' % [id, build])
+func _on_edit_btn_pressed(id: int, _env: int) -> void:
+	var file = FileManager.GetDefaultSecretsFile(id)
+	%JsonEditor.SetJsonEditorContent(file["appName"], file["parsedFile"], file["fileContent"])
+	%JsonEditor.visible = true
 
-func _on_delete_btn_pressed(id: int, build: int) -> void:
-	print('delete => id: %s, build: %s' % [id, build])
+func _on_delete_btn_pressed(id: int, env: int) -> void:
+	print('delete => id: %s, env: %s' % [id, env])
 #endregion
 
 #region control btns
@@ -159,18 +161,9 @@ func _on_forward_btn_pressed() -> void:
 	print('forward')
 #endregion
 
-#region windows btns
-func _on_minimize_btn_pressed() -> void:
-	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MINIMIZED)
-
-func _on_maximize_btn_pressed() -> void:
-	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)
-
+#region window btns
 func _on_tree_exiting() -> void:
 	FileManager.KillAllProcesses()
-
-func _on_close_btn_pressed() -> void:
-	get_tree().quit()
 #endregion
 
 #region signal managers
@@ -179,7 +172,7 @@ func ConnectSignals() -> void:
 		item.connect("runBackend", _on_run_back_btn_pressed)
 		item.connect("runFrontend", _on_run_front_btn_pressed)
 		item.connect("edit", _on_edit_btn_pressed)
-		item.connect("delete", _on_edit_btn_pressed)
+		item.connect("delete", _on_delete_btn_pressed)
 
 func DisconnectSignals() -> void:
 	for item in tableItemList:

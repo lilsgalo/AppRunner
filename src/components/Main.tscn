@@ -1,10 +1,14 @@
-[gd_scene load_steps=20 format=3 uid="uid://exbisxbyx6xe"]
+[gd_scene load_steps=19 format=3 uid="uid://exbisxbyx6xe"]
 
 [ext_resource type="Script" uid="uid://c5as4qmuktf0f" path="res://src/components/Main.gd" id="1_glv2v"]
+[ext_resource type="PackedScene" uid="uid://0wgtaxeptis8" path="res://src/components/TableItem.tscn" id="2_5c70h"]
 [ext_resource type="PackedScene" uid="uid://bhpbe080wk0y7" path="res://src/components/AddAppWindow.tscn" id="2_hk4rc"]
+[ext_resource type="PackedScene" uid="uid://ccplq3fr0ohrg" path="res://src/components/JsonEditor.tscn" id="4_ewugk"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r0du0"]
-bg_color = Color(0.14044744, 0.14044744, 0.14044744, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ewugk"]
+bg_color = Color(0.09411765, 0.09411765, 0.105882354, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8giiu"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_glv2v"]
 
@@ -12,11 +16,7 @@ bg_color = Color(0.14044744, 0.14044744, 0.14044744, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r0du0"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cm0pq"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fos0i"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3dxm6"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0i22p"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chrbn"]
 content_margin_left = 30.0
@@ -37,10 +37,6 @@ bg_color = Color(0.14117648, 0.14117648, 0.14117648, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hk4rc"]
 content_margin_left = 30.0
 bg_color = Color(0.6, 0.6, 0.6, 0)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_38a0m"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fh42b"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8ec3e"]
 content_margin_top = 5.0
@@ -63,18 +59,26 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ewugk")
 metadata/_edit_use_anchors_ = true
 
-[node name="MenuBarPanel" type="Panel" parent="AppContainer"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 0
+[node name="VBoxContainer" type="VBoxContainer" parent="AppContainer"]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 0.041666668
+anchor_bottom = 1.0
 grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_r0du0")
+grow_vertical = 2
+theme_override_constants/separation = 0
 metadata/_edit_use_anchors_ = true
 
-[node name="ConfigBtns" type="HBoxContainer" parent="AppContainer/MenuBarPanel"]
+[node name="MenuBarPanel" type="Panel" parent="AppContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_8giiu")
+metadata/_edit_use_anchors_ = true
+
+[node name="ConfigBtns" type="HBoxContainer" parent="AppContainer/VBoxContainer/MenuBarPanel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = -0.016666668
@@ -84,61 +88,27 @@ grow_vertical = 2
 theme_override_constants/separation = 0
 metadata/_edit_use_anchors_ = true
 
-[node name="SettingsBtn" type="Button" parent="AppContainer/MenuBarPanel/ConfigBtns"]
+[node name="SettingsBtn" type="Button" parent="AppContainer/VBoxContainer/MenuBarPanel/ConfigBtns"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_glv2v")
 text = "Configurações"
 
-[node name="BackBtn" type="Button" parent="AppContainer/MenuBarPanel/ConfigBtns"]
+[node name="BackBtn" type="Button" parent="AppContainer/VBoxContainer/MenuBarPanel/ConfigBtns"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_uu6xs")
 text = "←"
 
-[node name="ForwardBtn" type="Button" parent="AppContainer/MenuBarPanel/ConfigBtns"]
+[node name="ForwardBtn" type="Button" parent="AppContainer/VBoxContainer/MenuBarPanel/ConfigBtns"]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_r0du0")
 text = "→"
 
-[node name="WindowBtns" type="HBoxContainer" parent="AppContainer/MenuBarPanel"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.83515626
-anchor_top = -0.016666668
-anchor_right = 1.0
-anchor_bottom = 1.0166667
-grow_horizontal = 0
-grow_vertical = 2
-theme_override_constants/separation = 0
-alignment = 2
-metadata/_edit_use_anchors_ = true
-
-[node name="MinimizeBtn" type="Button" parent="AppContainer/MenuBarPanel/WindowBtns"]
+[node name="ContentPanel" type="Panel" parent="AppContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_cm0pq")
-text = "Minimizar"
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0i22p")
 
-[node name="MaximizeBtn" type="Button" parent="AppContainer/MenuBarPanel/WindowBtns"]
-layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_fos0i")
-text = "Maximizar"
-
-[node name="CloseBtn" type="Button" parent="AppContainer/MenuBarPanel/WindowBtns"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_3dxm6")
-text = "Close"
-
-[node name="ContentPanel" type="Panel" parent="AppContainer"]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.041666668
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ContentMargin" type="MarginContainer" parent="AppContainer/ContentPanel"]
+[node name="ContentMargin" type="MarginContainer" parent="AppContainer/VBoxContainer/ContentPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -151,16 +121,16 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="AppContainer/ContentPanel/ContentMargin"]
+[node name="VBoxContainer" type="VBoxContainer" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="AppContainer/ContentPanel/ContentMargin/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer"]
 custom_minimum_size = Vector2(0, 31)
 layout_mode = 2
 size_flags_vertical = 0
 alignment = 2
 
-[node name="TimerLabel" type="Label" parent="AppContainer/ContentPanel/ContentMargin/VBoxContainer/HBoxContainer"]
+[node name="TimerLabel" type="Label" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 2
@@ -170,7 +140,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_chrbn")
 text = "00"
 vertical_alignment = 1
 
-[node name="Search" type="LineEdit" parent="AppContainer/ContentPanel/ContentMargin/VBoxContainer/HBoxContainer"]
+[node name="Search" type="LineEdit" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -179,62 +149,87 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_4gxt3")
 placeholder_text = "Busque aqui..."
 caret_blink = true
 
-[node name="AddItemBtn" type="Button" parent="AppContainer/ContentPanel/ContentMargin/VBoxContainer/HBoxContainer"]
+[node name="AddItemBtn" type="Button" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_0vhqb")
 text = "Adicionar"
 
-[node name="StopAllBtn" type="Button" parent="AppContainer/ContentPanel/ContentMargin/VBoxContainer/HBoxContainer"]
+[node name="StopAllBtn" type="Button" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_chrbn")
 text = "Parar tudo"
 
-[node name="VSeparator" type="VSeparator" parent="AppContainer/ContentPanel/ContentMargin/VBoxContainer/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(15, 0)
 layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxEmpty_hk4rc")
 
-[node name="TableContent" type="VBoxContainer" parent="AppContainer/ContentPanel/ContentMargin/VBoxContainer"]
+[node name="TableContent" type="VBoxContainer" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="TableHeader" type="HBoxContainer" parent="AppContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent"]
+[node name="TableHeader" type="HBoxContainer" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent"]
 layout_mode = 2
 
-[node name="ApplicationLabel" type="Label" parent="AppContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent/TableHeader"]
-custom_minimum_size = Vector2(660, 0)
+[node name="NameContainer" type="HBoxContainer" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent/TableHeader"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+
+[node name="ApplicationLabel" type="Label" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent/TableHeader/NameContainer"]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_hk4rc")
 text = "Aplicação"
 
-[node name="VSeparator" type="VSeparator" parent="AppContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent/TableHeader"]
+[node name="BtnContainer" type="HBoxContainer" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent/TableHeader"]
+custom_minimum_size = Vector2(330, 0)
 layout_mode = 2
-theme_override_styles/separator = SubResource("StyleBoxEmpty_38a0m")
+size_flags_horizontal = 3
+theme_override_constants/separation = 36
+alignment = 1
 
-[node name="BuildLabel" type="Label" parent="AppContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent/TableHeader"]
-custom_minimum_size = Vector2(200, 0)
+[node name="DevLabel" type="Label" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent/TableHeader/BtnContainer"]
 layout_mode = 2
-text = "Build"
-horizontal_alignment = 1
+text = "Dev"
 
-[node name="VSeparator2" type="VSeparator" parent="AppContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent/TableHeader"]
+[node name="StageLabel" type="Label" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent/TableHeader/BtnContainer"]
 layout_mode = 2
-theme_override_styles/separator = SubResource("StyleBoxEmpty_fh42b")
+text = "Stage"
 
-[node name="ActionsLabel" type="Label" parent="AppContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent/TableHeader"]
-custom_minimum_size = Vector2(400, 0)
+[node name="HomologLabel" type="Label" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent/TableHeader/BtnContainer"]
+layout_mode = 2
+text = "Homolog"
+
+[node name="ProdLabel" type="Label" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent/TableHeader/BtnContainer"]
+layout_mode = 2
+text = "Prod"
+
+[node name="ActionsContainer" type="HBoxContainer" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent/TableHeader"]
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="ActionsLabel" type="Label" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent/TableHeader/ActionsContainer"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 text = "Ações"
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="AppContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent"]
+[node name="HSeparator" type="HSeparator" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent"]
 layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxEmpty_8ec3e")
 
+[node name="TableItem" parent="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/TableContent" instance=ExtResource("2_5c70h")]
+visible = false
+layout_mode = 2
+
 [node name="AddAppModal" parent="." instance=ExtResource("2_hk4rc")]
+unique_name_in_owner = true
+visible = false
+
+[node name="JsonEditor" parent="." instance=ExtResource("4_ewugk")]
 unique_name_in_owner = true
 visible = false
 
@@ -242,12 +237,9 @@ visible = false
 unique_name_in_owner = true
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
-[connection signal="pressed" from="AppContainer/MenuBarPanel/ConfigBtns/SettingsBtn" to="." method="_on_settings_btn_pressed"]
-[connection signal="pressed" from="AppContainer/MenuBarPanel/ConfigBtns/BackBtn" to="." method="_on_back_btn_pressed"]
-[connection signal="pressed" from="AppContainer/MenuBarPanel/ConfigBtns/ForwardBtn" to="." method="_on_forward_btn_pressed"]
-[connection signal="pressed" from="AppContainer/MenuBarPanel/WindowBtns/MinimizeBtn" to="." method="_on_minimize_btn_pressed"]
-[connection signal="pressed" from="AppContainer/MenuBarPanel/WindowBtns/MaximizeBtn" to="." method="_on_maximize_btn_pressed"]
-[connection signal="pressed" from="AppContainer/MenuBarPanel/WindowBtns/CloseBtn" to="." method="_on_close_btn_pressed"]
-[connection signal="pressed" from="AppContainer/ContentPanel/ContentMargin/VBoxContainer/HBoxContainer/AddItemBtn" to="." method="_on_add_item_btn_pressed"]
-[connection signal="pressed" from="AppContainer/ContentPanel/ContentMargin/VBoxContainer/HBoxContainer/StopAllBtn" to="." method="_on_stop_all_btn_pressed"]
+[connection signal="pressed" from="AppContainer/VBoxContainer/MenuBarPanel/ConfigBtns/SettingsBtn" to="." method="_on_settings_btn_pressed"]
+[connection signal="pressed" from="AppContainer/VBoxContainer/MenuBarPanel/ConfigBtns/BackBtn" to="." method="_on_back_btn_pressed"]
+[connection signal="pressed" from="AppContainer/VBoxContainer/MenuBarPanel/ConfigBtns/ForwardBtn" to="." method="_on_forward_btn_pressed"]
+[connection signal="pressed" from="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/HBoxContainer/AddItemBtn" to="." method="_on_add_item_btn_pressed"]
+[connection signal="pressed" from="AppContainer/VBoxContainer/ContentPanel/ContentMargin/VBoxContainer/HBoxContainer/StopAllBtn" to="." method="_on_stop_all_btn_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

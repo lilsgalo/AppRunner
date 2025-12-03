@@ -1,4 +1,5 @@
 extends Window
+class_name AddAppWindow
 
 var appName: String
 

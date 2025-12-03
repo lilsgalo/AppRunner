@@ -18,7 +18,7 @@ var blips: bool = true
 func _ready():
 	if sound:
 		audio_stream_player.pitch_scale = 1.0 + pitch_increase * 0.01
-		audio_stream_player.volume_linear = 0.05
+		audio_stream_player.volume_linear = 0.02
 		audio_stream_player.play()
 	
 	if blips:

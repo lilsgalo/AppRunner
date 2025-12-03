@@ -24,7 +24,6 @@ func SetupDatabase() -> void:
 		CreateAppsTable()
 		CreateUserTable()
 
-
 func CreateAppsTable() -> void:
 	var table = {
 		"rowid": {"data_type": "int", "primary_key": true},

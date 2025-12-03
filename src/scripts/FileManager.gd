@@ -1,14 +1,22 @@
 extends Node
 
-var appRunner: String = "AppRunner"
+var Environments = {
+	0:"dev",
+	1:"stage",
+	2:"homolog",
+	3:"prod"
+}
+
 var userPath: String
+var refsPath: String = "refs"
 var vsUserSecretsPath: String = "/Microsoft/UserSecrets/%s/secrets.json"
-var refsPath: String = "/refs"
 
 # Referências para arquivos de secrets
 var assemblyPath: String = "/Properties/AssemblyInfo.cs"
 var secretsPath: String = "/secrets"
-var secretsRefPath: String = "current.json"
+var secretsCurrentFileName: String = "current.json"
+var secretsDevFileName: String = "dev.json"
+var secretsStageFileName: String = "stage.json"
 
 # Referências para verificação dos paths das aplicações
 var projSuffix: String = ".csproj"
@@ -47,8 +55,12 @@ func CreateFolder(fileName: String, complementaryPath: String = "") -> String:
 
 func CopySecretsFile(secretsId: String, refFolder: String) -> void:
 	var vsFile = GetSecretsFile(secretsId)
-	var secrets = FileAccess.open("%s/%s/%s/%s" % [userPath, refsPath, refFolder, secretsRefPath], FileAccess.WRITE)
-	secrets.store_string(vsFile.get_as_text())
+	var current = FileAccess.open("%s/%s/%s/%s" % [userPath, refsPath, refFolder, secretsCurrentFileName], FileAccess.WRITE)
+	var dev = FileAccess.open("%s/%s/%s/%s" % [userPath, refsPath, refFolder, secretsDevFileName], FileAccess.WRITE)
+	var stage = FileAccess.open("%s/%s/%s/%s" % [userPath, refsPath, refFolder, secretsStageFileName], FileAccess.WRITE)
+	current.store_string(vsFile.get_as_text())
+	dev.store_string(vsFile.get_as_text())
+	stage.store_string(vsFile.get_as_text())
 
 func ValidateBackendPath(path: String) -> bool:
 	var apiName = GetApiNameFromPath(path)
@@ -83,6 +95,38 @@ func GetSecretsFile(id: String) -> FileAccess:
 	if file:
 		return file
 	return null
+
+func GetDefaultSecretsFile(rowid: int) -> Dictionary:
+	var app = DbController.GetById(rowid)
+	if !app:
+		Utils.Log("Failed to get App. Attempted to get: RowId = %d" % rowid, Utils.Type.Error)
+		return {}
+	
+	var dir = DirAccess.open(app.refFolder)
+	if !dir:
+		Utils.Log("Failed to get Application. Attempted to get: RefFolder = %s" % app.refFolder, Utils.Type.Error)
+		return {}
+	if !dir.get_files().has(secretsCurrentFileName):
+		Utils.Log("Secrets file not found. Attempted to get: %s" % secretsCurrentFileName, Utils.Type.Error)
+		return {}
+	
+	var file = FileAccess.open("%s/%s" % [app.refFolder, secretsCurrentFileName], FileAccess.READ)
+	if !file:
+		Utils.Log("Failed to get Secrets file not found. Attempted to get: %s/%s" % [app.refFolder, secretsCurrentFileName], Utils.Type.Error)
+		return {}
+	var fileContent = file.get_as_text()
+	
+	var json = JSON.new()
+	var output = json.parse(fileContent)
+	if output != OK:
+		Utils.Log("Failed to parse Secrets file's content", Utils.Type.Error)
+		return {}
+	
+	return {"appName": app.name, "parsedFile": json.data, "fileContent": fileContent}
+
+func OpenJson(file: FileAccess) -> Variant:
+	var parsedFile = JSON.parse_string(file.get_as_text())
+	return parsedFile
 
 func CompileRegex(expression: String) -> RegEx:
 	var regex = RegEx.new()

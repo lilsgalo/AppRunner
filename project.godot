@@ -15,7 +15,7 @@ config/version="0.1"
 run/main_scene="uid://exbisxbyx6xe"
 config/custom_user_dir_name="AppRunner"
 config/features=PackedStringArray("4.5", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://bl3ich2u30ly3"
 
 [autoload]
 
@@ -30,8 +30,10 @@ Utils="*res://src/scripts/Utils.gd"
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/size/mode=1
-window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+window/size/resizable=false
+window/size/minimize_disabled=true
+window/size/maximize_disabled=true
+window/energy_saving/keep_screen_on=false
 
 [editor]
 

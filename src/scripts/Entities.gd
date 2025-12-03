@@ -16,7 +16,7 @@ class App:
 	var backPID: int
 	
 	# Build control variables
-	var build: int
+	var env: int
 	var canRunDev: bool
 	var canRunStage: bool
 	var canRunHomolog: bool

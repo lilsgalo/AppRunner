@@ -1,14 +1,19 @@
 extends HBoxContainer
 
-signal runFrontend(id: int, build: int)
-signal runBackend(id: int, build: int)
-signal edit(id: int, build: int)
-signal delete(id: int, build: int)
+signal runFrontend(id: int, env: int)
+signal runBackend(id: int, env: int)
+signal edit(id: int, env: int)
+signal delete(id: int, env: int)
 
 var app: Entities.App
 
 var styleRunning: StyleBoxFlat = StyleBoxFlat.new()
 var styleStopped: StyleBoxFlat = StyleBoxFlat.new()
+
+var playIconBlack = preload("uid://dj24uprdinwkg")
+var playIconWhite = preload("uid://u3fwlj6k4ho0")
+var pauseIconBlack = preload("uid://b710an1ha8fca")
+var pauseIconWhite = preload("uid://dqbrpu8nlti0w")
 
 func _ready() -> void:
 	styleRunning.bg_color = "#2a5b32"
@@ -20,8 +25,6 @@ func SetProjectInfo(p_app: Entities.App) -> void:
 	SetBackState(app.backIsRunning)
 	%NameLabel.text = app.name.to_upper()
 	
-	%EditBtn.disabled = true
-	%DeleteBtn.disabled = true
 	if app.backendPath.is_empty():
 		%RunBackBtn.disabled = true
 	if app.frontendPath.is_empty():
@@ -44,30 +47,22 @@ func SetProjectInfo(p_app: Entities.App) -> void:
 func UpdateProjectInfo() -> void:
 	pass
 
-func SetCurrentBuild(build: int) -> void:
-	app.build = build
+func SetCurrentEnvironment(env: int) -> void:
+	app.env = env
 
 func SetFrontState(value: bool) -> void:
 	app.frontIsRunning = value
 	if value:
-		%RunFrontBtn.text = "Parar front"
-		%RunFrontBtn.add_theme_stylebox_override("normal", styleRunning)
-		%RunFrontBtn.add_theme_stylebox_override("hover", styleRunning)
+		%RunFrontBtn.icon = pauseIconWhite
 	else:
-		%RunFrontBtn.text = "Rodar front"
-		%RunFrontBtn.add_theme_stylebox_override("normal", styleStopped)
-		%RunFrontBtn.add_theme_stylebox_override("hover", styleStopped)
+		%RunFrontBtn.icon = playIconWhite
 
 func SetBackState(value: bool) -> void:
 	app.backIsRunning = value
 	if value:
-		%RunBackBtn.text = "Parar back"
-		%RunBackBtn.add_theme_stylebox_override("normal", styleRunning)
-		%RunBackBtn.add_theme_stylebox_override("hover", styleRunning)
+		%RunBackBtn.icon = pauseIconWhite
 	else:
-		%RunBackBtn.text = "Rodar back"
-		%RunBackBtn.add_theme_stylebox_override("normal", styleStopped)
-		%RunBackBtn.add_theme_stylebox_override("hover", styleStopped)
+		%RunBackBtn.icon = playIconWhite
 
 func GetRowId() -> int:
 	return app.rowid
@@ -80,17 +75,17 @@ func GetFrontendPID() -> int:
 
 #region on btns pressed
 func _on_run_option_button_item_selected(index: int) -> void:
-	SetCurrentBuild(index)
+	SetCurrentEnvironment(index)
 
 func _on_run_back_btn_pressed() -> void:
-	runBackend.emit(app.rowid, app.build)
+	runBackend.emit(app.rowid, app.env)
 
 func _on_run_front_btn_pressed() -> void:
-	runFrontend.emit(app.rowid, app.build)
+	runFrontend.emit(app.rowid, app.env)
 
 func _on_edit_btn_pressed() -> void:
-	edit.emit(app.rowid, app.build)
+	edit.emit(app.rowid, app.env)
 
 func _on_delete_btn_pressed() -> void:
-	delete.emit(app.rowid, app.build)
+	delete.emit(app.rowid, app.env)
 #endregion
